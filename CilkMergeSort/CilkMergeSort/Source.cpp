@@ -1,17 +1,25 @@
 /*
 	Project to demonstrate merge sort using Cilk
 	Resources:
-		recursiveMergeSort heavily based off Merge-Sort pseudocode from book (page 34)
-		parallelMergeSort heavily based off Merge-Sort pseudocode from book (page 797)
-		merge heavily based off merge pseudocode from book (page 31)
+		recursiveMergeSort heavily based off MERGE-SORT pseudocode from book (page 34)
+		parallelMergeSort heavily based off MERGE-SORT pseudocode from book (page 797)
+		pMergeSort heavily based off P-MERGE-SORT pseudocode from book (page 803)
+		merge heavily based off MERGE pseudocode from book (page 31)
+		pMerge heavily based off P-MERGE pseudocode from book (page 800)
+		binarySearch heavily based off BINARY-SEARCH pseudocode from book (page 799)
 */
 
 #include<iostream>
+#include<math.h>
+
 using namespace std;
 
 void recursiveMergeSort(int[], int, int);
 void parallelMergeSort(int[], int, int);
+void pMergeSort(int[], int, int, int[], int);
 void merge(int[], int, int, int);
+void pMerge(int[], int, int, int, int, int, int);
+int binarySearch(int, int[],int, int);
 
 const int TOINFINITYANDBEYOND = 9999; //"Infinity" for our purposes.
 
@@ -35,6 +43,25 @@ void parallelMergeSort(int array[], int p, int r) {
 		parallelMergeSort(array, (q + 1), r);
 		//SYNC
 		merge(array, p, q, r);
+	}
+}
+
+void pMergeSort(int Aarray[], int p, int r, int Barray[], int s)
+{
+	int n = r-p+1;
+	if (n==1)
+	{
+		Barray[s]= Array[p];
+	}
+	else{
+		int Tarray[99999999999999999999999];
+		int q = floor((p+r)/2);
+		int qprime = q-p+1;
+		
+		//SPAWNpMergeSort(Aarray, p, q, Tarray, 1);
+		pMergeSort(Aarray, (q+1), r, Tarray, (qprime+1));
+		//Sync
+		pMerge(Tarray, 1, qprime, (qprime+1), n, Barray, s);
 	}
 }
 
@@ -70,3 +97,56 @@ void merge(int array[], int p, int q, int r) {
 	}
 }
 
+void pmerge(int Tarray[], int p1, int r1, int p2, int r2, int Aarray[], int p3) {
+	int n1 = r1 - p1 +1;
+	int n2 = r2 - p2 +1;
+	
+	if(n1 < n2)
+	{
+		int tempp1 = p1;
+		p1 = p2;
+		p2 = tempp1;
+		
+		int tempr1 = r1;
+		r1 = r2;
+		r2 = tempr2;
+		
+		int tempn1 = n1;
+		n1 = n2;
+		n2 = tempn1;
+	}
+	
+	if (n1 == 0)
+	{
+		return;
+	}
+	
+	else{
+		int q1 = floor((p1+r1)/2);
+		int q2 = BinarySearch(Tarray[q1], Tarray, p2, r2);
+		int q3 = p3 + (q1 -p1) + (q2 - p2);
+		Aarray[q3] = Tarray[q1];
+		//SPAWN pmerge(Tarray, p1, (q1-1), p2, (q2-1), Aarray, p3);
+		pmerge(Tarray, (q1+1), r1, q2, r2, Aarray, (q3+1));
+		//SYNC
+		
+		
+	}
+}
+
+int binarySearch(int x, int Tarray[],int p, int r){
+	int low = p;
+	int high = max(p,r+1); //What is max?
+	
+	while(low < high){
+		mid = floor((low + high) / 2);
+		if(x <= Tarray[mid]){
+			high = mid;
+		}
+		else{
+			low = mid + 1;
+		}
+	}
+	
+	return high;
+}
