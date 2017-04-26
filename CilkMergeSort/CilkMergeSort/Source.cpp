@@ -1,5 +1,5 @@
 /*
-	Code written by Tyler Hemphil and Amanda Panell, collaborated with Thomas Carter
+	Code written by Thomas Carter, Tyler Hemphil and Amanda Panell
 
 	Project to demonstrate merge sort using Cilk
 	Resources:
@@ -177,17 +177,16 @@ void pmerge(int Tarray[], int p1, int r1, int p2, int r2, int Aarray[], int p3) 
 
 int binarySearch(int x, int Tarray[],int p, int r){
 	int low = p;
-	int high = max(p,r+1); //What is max?
+	int high = max(p, r + 1);
 	
-	while(low < high){
+	cilk_for ( ; low < high; ) {
 		mid = floor((low + high) / 2);
-		if(x <= Tarray[mid]){
+		if (x <= Tarray[mid]) {
 			high = mid;
 		}
-		else{
+		else {
 			low = mid + 1;
 		}
-	}
-	
+	}	
 	return high;
 }
