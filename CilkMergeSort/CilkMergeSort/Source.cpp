@@ -1,5 +1,11 @@
 /*
 	Code written by Thomas Carter, Tyler Hemphil and Amanda Panell
+	
+	Command line paramaters:
+		1- input file
+		2- output file path 1 (recursive)
+		3- output file 2 path (parallel merge sort w/ regular merge)
+		4- output file 3 path (parallel merge sort w/ parallel mege)
 
 	Project to demonstrate merge sort using Cilk
 	Resources:
@@ -30,21 +36,22 @@ const int TOINFINITYANDBEYOND = 999999; //"Infinity" for our purposes.
 
 int main(int argc, char *argv[]) {
 	int count = processFile(argv[1], intArray[]); //Open file and get count
+	int bArray[TOINFINITYANDBEYOND];
 	
 	//"Temporary" arrays
 	int arrayToSortRecursive[TOINFINITYANDBEYOND];
 	int arrayToSortParallel[TOINFINITYANDBEYOND];
 	int arrayToSortParallelMerge[TOINFINITYANDBEYOND];
 
-	recursiveMergeSort();
-	printArray(arrayToSortRecursive);
-	parallelMergeSort();
-	printArray(arrayToSortParallel);
-	pMergeSort();
-	printArrayToFile(arrayToSortParallelMerge);
+	recursiveMergeSort(arrayToSortRecursive,1,count);
+	printArray(arrayToSortRecursive, argv[2], count);
+	parallelMergeSort(arrayToSortParallel, 1, count);
+	printArray(arrayToSortParallel, argv[3], count);
+	pMergeSort(arrayToSortParallelMerge, 1, count, bArray, 0);
+	printArrayToFile(arrayToSortParallelMerge, argv[4], count);
 }
 
-void printArrayToFile(int arrayToPrint, String filePathm int arrayLength){
+void printArrayToFile(int arrayToPrint, String filePath int arrayLength){
 	ofStream outFile;
 	outFile.open(filePath);
 	
