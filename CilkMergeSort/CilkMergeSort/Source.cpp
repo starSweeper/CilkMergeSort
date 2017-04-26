@@ -4,8 +4,8 @@
 	Command line paramaters:
 		1- input file
 		2- output file path 1 (recursive)
-		3- output file 2 path (parallel merge sort w/ regular merge)
-		4- output file 3 path (parallel merge sort w/ parallel mege)
+		3- output file path 2 (parallel merge sort w/ regular merge)
+		4- output file path 3 (parallel merge sort w/ parallel mege)
 
 	Project to demonstrate merge sort using Cilk
 	Resources:
