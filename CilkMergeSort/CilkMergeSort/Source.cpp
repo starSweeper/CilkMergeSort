@@ -103,7 +103,7 @@ void pMergeSort(int Aarray[], int p, int r, int Barray[], int s)
 		
 		cilk_spawn pMergeSort(Aarray, p, q, Tarray, 1);
 		pMergeSort(Aarray, (q+1), r, Tarray, (qprime+1));
-		//Sync
+		cilk_sync;
 		pMerge(Tarray, 1, qprime, (qprime+1), n, Barray, s);
 	}
 }
